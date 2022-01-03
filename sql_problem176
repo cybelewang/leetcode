@@ -1,6 +1,0 @@
-With ctn as 
-(Select salary, dense_rank() over(order by salary desc) as 'rank'
-from Employee) 
-Select ifnull((select distinct(ctn.salary)
-from ctn
-where ctn.rank = 2), null) as SecondHighestSalary
