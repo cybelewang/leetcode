@@ -1,0 +1,12 @@
+with ctn as
+(Select a.bus_id, a.arrival_time, ifnull(count(b.passenger_id),0) as 'numbers'
+from Buses a 
+left join Passengers b
+on a.arrival_time >= b.arrival_time
+group by a.bus_id),
+ctn1 as
+(Select ctn.bus_id, ctn.numbers as 'numbers', lag(ctn.numbers,1,0) over(order by ctn.arrival_time) as 'prenum'
+from ctn)
+Select ctn1.bus_id as bus_id, ctn1.numbers-ctn1.prenum as 'passengers_cnt'
+from ctn1
+group by ctn1.bus_id
